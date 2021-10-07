@@ -13,6 +13,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.time.Duration;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -27,10 +29,13 @@ public class ProductInfoControllerTest {
     @Test
     public void shouldReturnListOfProduct_WhenGetByNamesCall() {
 
-        webTestClient.get()
+        webTestClient.mutate()
+                .responseTimeout(Duration.ofSeconds(15))
+                .build()
+                .get()
                 .uri(builder -> builder
                         .path("/productInfoService/product/names")
-                        .queryParam("productId", "123")
+                        .queryParam("productCode", "123")
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()

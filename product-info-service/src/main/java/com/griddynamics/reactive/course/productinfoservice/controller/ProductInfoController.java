@@ -19,7 +19,7 @@ public class ProductInfoController {
     private final ProductInfoService productInfoService;
 
     @GetMapping("/product/names")
-    public List<Product> getProductNamesByProductId(@RequestParam String productId) {
-        return productInfoService.getProductNamesByProductId(productId);
+    public List<Product> getProductNamesByProductCode(@RequestParam String productCode) {
+        return productInfoService.getProductNamesByProductCode(productCode);
     }
 }
