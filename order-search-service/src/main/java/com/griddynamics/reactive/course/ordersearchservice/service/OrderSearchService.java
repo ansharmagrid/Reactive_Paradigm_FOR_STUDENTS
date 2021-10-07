@@ -16,7 +16,7 @@ import java.util.Random;
 public class OrderSearchService {
 
     private final OrderResource orderResource;
-    public final Random random = new Random();
+    private final Random random = new Random();
 
     public Flux<Order> getOrdersByPhone(String phoneNumber) {
 

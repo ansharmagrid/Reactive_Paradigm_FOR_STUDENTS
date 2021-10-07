@@ -29,13 +29,13 @@ public class OrderSearchControllerTest {
 
         StepVerifier.create(webTestClient.get()
                         .uri(builder -> builder
-                                .path("/orderInfoService/order/phone")
+                                .path("/orderSearchService/order/phone")
                                 .queryParam("phoneNumber", "123")
                                 .build())
-                        .accept(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_NDJSON)
                         .exchange()
                         .expectStatus().isOk()
-                        .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .expectHeader().contentType(MediaType.APPLICATION_NDJSON_VALUE)
                         .returnResult(Order.class)
                         .getResponseBody())
                 .expectNextCount(4)
