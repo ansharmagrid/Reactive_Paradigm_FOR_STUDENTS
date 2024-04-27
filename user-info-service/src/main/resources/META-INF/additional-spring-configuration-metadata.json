@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "searchOrderByPhoneUrl",
+    "type": "java.lang.String",
+    "description": "It calls order-search-service"
+  },
+  {
+    "name": "searchProductByProductCode",
+    "type": "java.lang.String",
+    "description": "A description for 'searchProductByProductCode'"
+  }
+]}
