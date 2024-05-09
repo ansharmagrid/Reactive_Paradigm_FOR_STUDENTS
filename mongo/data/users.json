@@ -2,11 +2,13 @@
   {
     "_id": "user1",
     "name": "John",
-    "phone": "123456789"
+    "phone": "123456789",
+    "_class": "com.user.info.entities.UserInfoEntity"
   },
   {
     "_id": "user2",
     "name": "Mark",
-    "phone": "987654321"
+    "phone": "987654321",
+    "_class": "com.user.info.entities.UserInfoEntity"
   }
 ]

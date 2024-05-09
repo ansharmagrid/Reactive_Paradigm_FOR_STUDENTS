@@ -23,7 +23,13 @@ public class UserInfoController {
 	
 	@GetMapping("/all")
 	Flux<UserInfoEntity> findAllUsers(){
-		return productService.findAllUsers();
+		try {
+
+			return productService.findAllUsers();
+		}
+		catch(Exception ex) {
+			return Flux.fromArray(new UserInfoEntity[] {});
+		}
 	}
 
 }

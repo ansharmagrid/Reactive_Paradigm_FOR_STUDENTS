@@ -51,6 +51,12 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public Flux<Order> findOrdersByPhoneNumber(Flux<String> phoneNumberFlux) {
+		return phoneNumberFlux.flatMap(phoneNumber -> webClient.get().uri(searchOrderByPhoneUrl + "?phoneNumber=" + phoneNumber)
+				.exchangeToFlux(response -> response.bodyToFlux(Order.class)).log());
+	}
+	
+	@Override
 	public Flux<Product> findProductsByProductCode(String productCode) {
 		return webClient.get().uri(searchProductByProductCode + "?productCode=" + productCode)
 				.exchangeToFlux(response -> response.bodyToFlux(Product.class)).log();
@@ -59,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Mono<Product> findProductWithHighestScore(Flux<Product> productFlux) {
 		return productFlux
-				.reduceWith(() -> new Product("","","",0.0),
+				.reduceWith(() -> new Product("","","",Double.MIN_VALUE),
 						(maxProduct, product) -> maxProduct.getScore() > product.getScore() ? maxProduct : product)
 				.log();
 	}
@@ -77,6 +83,11 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Flux<Order> findAllOrders() {
 		return findAllUsers().map(user -> user.getPhone()).flatMap(phone -> findOrdersByPhoneNumber(phone));
+	}
+
+	@Override
+	public Flux<Order> findOrdersByUserId(String userId) {
+		return findOrdersByPhoneNumber(Flux.from(findPhoneNumberByUserId(userId)));
 	}
 
 }
