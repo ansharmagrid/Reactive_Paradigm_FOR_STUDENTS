@@ -13,27 +13,52 @@ services:
 
   mongo:
     image: mongo
-    container_name: mongodb
     ports:
       - "27017:27017"
     env_file:
       - ./env/mongo.env
+    volumes:
+      - "./mongo/data:/mongo/data"
+    networks:
+      - mongodb
+
+  mongodbtest:
+    image: mongo
+    command: mongod --port 27027
+    ports:
+      - "27027:27027"
+    env_file:
+      - ./env/mongo-test.env
+    volumes:
+      - "./mongo/data-test:/mongo/data-test"
+    networks:
+      - mongodbtest
 
   mongoimport:
     image: mongo
     volumes:
       - ./mongo/data/users.json:/src/data/users.json
-    command: mongoimport --host mongo --username root --password pwd --db admin --collection userInfoEntity --file /src/data/users.json --jsonArray
+    command: mongoimport --host mongo --username root --password pwd --port 27017 --db admin --collection userInfoEntity --file /src/data/users.json --jsonArray
+    depends_on:
+      - mongo
+    networks:
+      - mongodb
 
   order-search-service:
     build:
       context: ./order-search-service
       dockerfile: Dockerfile
     image: order-search-service
+    volumes:
+      - ./order-search-service/logs:/logs
     ports:
       - "8091:8091"
     env_file:
       - ./env/order-search-service.env
+    networks:
+      - mongodb
+      - mongodbtest
+      - network-default
 
   product-info-service:
     build:
@@ -44,17 +69,33 @@ services:
       - "8092:8092"
     env_file:
       - ./env/product-info-service.env
+    networks:
+      - mongodb
+      - mongodbtest
+      - network-default
 
   user-info-service:
     build:
       context: ./user-info-service
       dockerfile: Dockerfile
     image: user-info-service
+    volumes:
+      - ./user-info-service/logs:/logs
     ports:
       - "8093:8093"
     env_file:
       - ./env/user-info-service.env
     depends_on:
       - mongo
+      - mongodbtest
       - order-search-service
       - product-info-service
+    networks:
+      - mongodb
+      - mongodbtest
+      - network-default
+
+networks:
+  mongodb:
+  mongodbtest:
+  network-default:

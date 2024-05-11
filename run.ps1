@@ -9,6 +9,9 @@ $hour = $dateTime.Hour.ToString("00")
 $minute = $dateTime.Minute.ToString("00")
 $second = $dateTime.Second.ToString("00")
 
+#previous log cleanup
+Compress-Archive -update docker-service*.log docker-service.log.zip
+Remove-Item docker-service*.log
 
 # Construct the log file name
 $logFile = "docker-service_${day}${month}${year}_${hour}${minute}${second}.log"
