@@ -31,7 +31,7 @@ import reactor.test.StepVerifier;
 @SpringJUnitConfig
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.MethodName.class)
-public class ProductServiceImplTest {
+public class ProductServiceImplTest_WireMockStubbed {
 
 	private static final String USERID_1 = "test-user-1";
 	private static final String USERID_2 = "test-user-2";
