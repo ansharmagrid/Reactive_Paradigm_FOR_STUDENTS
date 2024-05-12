@@ -1,0 +1,26 @@
+[
+    {
+        "productId": "111",
+        "productCode": "7894",
+        "productName": "IceCream",
+        "score": 4498.26
+    },
+    {
+        "productId": "222",
+        "productCode": "7894",
+        "productName": "Milk",
+        "score": 5796.52
+    },
+    {
+        "productId": "333",
+        "productCode": "7894",
+        "productName": "Meal",
+        "score": 3059.57
+    },
+    {
+        "productId": "444",
+        "productCode": "7894",
+        "productName": "Apple",
+        "score": 5876.35
+    }
+]

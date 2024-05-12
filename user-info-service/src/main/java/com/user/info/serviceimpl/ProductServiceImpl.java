@@ -35,39 +35,38 @@ public class ProductServiceImpl implements ProductService {
 	public Mono<Product> findProductByUserId(String userId) {
 		return findProductWithHighestScore(
 				Flux.from(findPhoneNumberByUserId(userId)).flatMap(phoneNumber -> findOrdersByPhoneNumber(phoneNumber))
-						.flatMap(order -> findProductsByProductCode(order.getProductCode())))
-				.log();
+						.flatMap(order -> findProductsByProductCode(order.getProductCode())));
 	}
 
 	@Override
 	public Mono<String> findPhoneNumberByUserId(String userId) {
-		return userInfoRepository.findById(userId).map(user -> user.getPhone()).log();
+		return userInfoRepository.findById(userId).map(user -> user.getPhone());
 	}
 
 	@Override
 	public Flux<Order> findOrdersByPhoneNumber(String phoneNumber) {
 		return webClient.get().uri(searchOrderByPhoneUrl + "?phoneNumber=" + phoneNumber)
-				.exchangeToFlux(response -> response.bodyToFlux(Order.class)).log();
+				.exchangeToFlux(response -> response.bodyToFlux(Order.class));
 	}
 
 	@Override
 	public Flux<Order> findOrdersByPhoneNumber(Flux<String> phoneNumberFlux) {
-		return phoneNumberFlux.flatMap(phoneNumber -> webClient.get().uri(searchOrderByPhoneUrl + "?phoneNumber=" + phoneNumber)
-				.exchangeToFlux(response -> response.bodyToFlux(Order.class)).log());
+		return phoneNumberFlux
+				.flatMap(phoneNumber -> webClient.get().uri(searchOrderByPhoneUrl + "?phoneNumber=" + phoneNumber)
+						.exchangeToFlux(response -> response.bodyToFlux(Order.class)));
 	}
-	
+
 	@Override
 	public Flux<Product> findProductsByProductCode(String productCode) {
 		return webClient.get().uri(searchProductByProductCode + "?productCode=" + productCode)
-				.exchangeToFlux(response -> response.bodyToFlux(Product.class)).log();
+				.exchangeToFlux(response -> response.bodyToFlux(Product.class));
 	}
 
 	@Override
 	public Mono<Product> findProductWithHighestScore(Flux<Product> productFlux) {
 		return productFlux
-				.reduceWith(() -> new Product("","","",Double.MIN_VALUE),
-						(maxProduct, product) -> maxProduct.getScore() > product.getScore() ? maxProduct : product)
-				.log();
+				.reduceWith(() -> new Product("", "", "", Double.MIN_VALUE),
+						(maxProduct, product) -> maxProduct.getScore() > product.getScore() ? maxProduct : product);
 	}
 
 	@Override
