@@ -95,6 +95,22 @@ services:
       - mongodbtest
       - network-default
 
+  logging-service:
+    build:
+      context: ./logging-service
+      dockerfile: Dockerfile
+    image: logging-service
+    volumes:
+      - ./logging-service/logs:/logs
+    ports:
+      - "8094:8094"
+    env_file:
+      - ./env/logging-service.env
+    networks:
+      - mongodb
+      - mongodbtest
+      - network-default
+
 networks:
   mongodb:
   mongodbtest:
