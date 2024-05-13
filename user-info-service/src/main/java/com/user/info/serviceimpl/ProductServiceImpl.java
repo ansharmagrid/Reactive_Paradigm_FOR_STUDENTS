@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.user.info.config.RequestResponseLoggingFilter;
 import com.user.info.entities.Order;
 import com.user.info.entities.Product;
 import com.user.info.entities.UserInfoEntity;
@@ -20,7 +19,8 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-	WebClient webClient = WebClient.builder().filter(new RequestResponseLoggingFilter()).build();
+	@Autowired
+	private WebClient webClient;
 
 	@Autowired
 	UserInfoRepository userInfoRepository;

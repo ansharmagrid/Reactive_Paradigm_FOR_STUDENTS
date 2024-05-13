@@ -6,9 +6,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class WebConfig {
-	
+
 	@Bean
 	WebClient webClient() {
-		return WebClient.builder().filter(new RequestResponseLoggingFilter()).build();
+		return WebClient.create();
 	}
+
 }
