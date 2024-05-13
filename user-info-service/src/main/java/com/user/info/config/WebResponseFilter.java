@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
 import org.reactivestreams.Publisher;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -30,8 +31,10 @@ import reactor.core.publisher.Mono;
 public class WebResponseFilter implements WebFilter, Ordered {
 
 	private static final ObjectMapper mapper = new ObjectMapper();
-	private static final WebClient loggingClient = WebClient.builder().baseUrl("http://localhost:8094/logging-service")
-			.build();
+	private static final WebClient loggingClient = WebClient.create();
+
+	@Value("${loggingServiceUrl}")
+	private String loggingServiceUrl;
 
 	@Override
 	public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
@@ -103,7 +106,7 @@ public class WebResponseFilter implements WebFilter, Ordered {
 	}
 
 	private void logResponse(String logMessage) {
-		loggingClient.post().uri("/log")
+		loggingClient.post().uri(loggingServiceUrl + "/log")
 				.bodyValue(LogRequest.builder().loggerName(getClass().toGenericString()).logLevel(Level.INFO.toString())
 						.logMessage(logMessage).logTimestamp(LocalDateTime.now().toString()).build())
 				.retrieve().toEntity(String.class).subscribe();
